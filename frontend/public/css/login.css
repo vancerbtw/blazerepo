@@ -1,0 +1,367 @@
+* {
+    --semi-bold: 600;
+    --bold: 700;
+    font-family: -apple-system-font,BlinkMacSystemFont,Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+body {
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    background-color: #f4f8f7;
+}
+
+/* Entire Center Box */
+.centerCard {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 10px;
+    width: calc(100vw - 30px);
+    height: calc(100vh - 30px);
+    max-width: 1100px;
+    max-height: 600px;
+    box-shadow: rgba(0,0,0,.065) 5px 5px 15px,
+                rgba(0,0,0,.065) -5px -5px 15px;
+    overflow: hidden;
+}
+
+/* Right Column */
+.centerCardContent {
+    text-align: center;
+    box-sizing: border-box;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-shadow: -5px 0 10px -10px rgba(0,0,0,.08);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 35%;
+    max-height: 100%;
+    width: 65%;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.centerCardContent h1 {
+    text-align: center;
+}
+
+/* Left Column */
+.sidebar {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: linear-gradient(to bottom right, rgba(85, 150, 191, .9), rgba(70, 105, 175, .9));
+    width: 35%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.sidebarContent {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#logo {
+    width:108px;
+    height:35px;
+    padding: 20px;
+    float: left;
+}
+.sidebarButton, .loginButton {
+    background: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 10pt;
+    color: white;
+    border-radius: 100px;
+    max-width: 300px;
+    width: 65%;
+    margin: 30px auto 0 auto;
+    padding: 15px;
+    border: white 2px solid;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.sidebarButton:hover {
+    background-color: white;
+    color: rgb(85, 150, 191);
+}
+
+/* Background Shapes */
+#backgroundSquare, #backgroundCircle {
+    background-color: #d6e7f2;
+    width: 50vw;
+    height: 50vw;
+    position: absolute;
+}
+#backgroundSquare {
+    transform: translate(55%, -40%) rotate(45deg);
+    border-radius: 50px;
+    top: 0;
+    right: 0;
+}
+#backgroundCircle {
+    transform: translate(-35%, 65%);
+    border-radius: 50%;
+    bottom: 0;
+    left: 0;
+}
+
+/* Form Style */
+input {
+    margin: 0 auto;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgba(0,0,0,.1);
+    outline: none !important;
+    box-shadow: none;
+    border: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
+    border-radius: 100px;
+    width: 100%;
+    max-width: 400px;
+}
+.sidebar input::placeholder {
+    color: rgba(255,255,255,.5);
+}
+
+#forgotPassword {
+    text-decoration: none;
+}
+#forgotPassword  * {
+    color: rgba(0,0,0,.65);
+    margin-top: 20px;
+}
+
+/* Sign in with socials icons */
+.glyphIcon {
+    margin-right: 15px;
+}
+.glyphIcon img {
+    opacity: .55;
+    filter: grayscale(1) brightness(0);
+    width: 30px;
+    height: 30px;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.sidebar .glyphIcon img {
+    filter: grayscale(1) brightness(8);
+}
+.glyphIcon img:hover {
+    opacity: 1;
+    filter: none;
+    transform: scale(1.2);
+}
+.glyphContainer {
+    margin-bottom: 15px;
+}
+.glyphContainer .glyphIcon:last-of-type {
+    margin-right: 0;
+}
+
+#signIn, #signUp {
+    width: 100%;
+}
+#signUpWelcomeMessage, #signInWelcomeMessage {
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+/* Default Layout */
+#signUp, #signInWelcomeMessage {
+    display: none;
+}
+
+/* Login Button */
+.loginButton {
+    border: none;
+    background-color: #487cdc;
+}
+.loginButton:hover {
+    background-color: #6390e1;
+}
+
+/* Mobile Only Content */
+.mobileOnly {
+    display: none;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.08);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.20);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+
+/* Mobile */
+@media only screen and (max-width: 800px) {
+    body {
+        max-width: 100vw;
+        overflow: hidden;
+    }
+    .mobileOnly {
+        display: inherit;
+    }
+    /*Header Pill Selector */
+    .headerPillSelector {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        min-height: 30px;
+        padding-top: 10px;
+        display: inline-block;
+        width: 100%;
+    }
+    .pillText {
+        cursor: pointer;
+        padding-bottom: 10px;
+        transform: translateX(-50%);
+        position: absolute;
+        color: white;
+        font-weight: bold;
+        transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        -ms-transition: all 0.5s ease;
+    }
+    .pillSelectorLine {
+        border-radius: 20px 20px 0 0;
+        left: 25%;
+        min-width: calc(50%);
+        min-height: 45px;
+        background-color: #f4f8f7;;
+        position: absolute;
+        bottom: 0;
+        transform: translateX(-50%);
+        transition: all 0.5s ease;
+        -webkit-transition: all 0.5s ease;
+        -moz-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        -ms-transition: all 0.5s ease;
+    }
+    .sidebar {
+        width: 100% !important;
+        height: 20vh;
+    }
+    .sidebar .glyphIcon img {
+        filter: grayscale(1) brightness(0);
+    }
+    #signUpWelcomeMessage, #signInWelcomeMessage, #logo {
+        display: none !important;
+    }
+    #signIn, #signUp {
+        display: inline-block !important;
+    }
+    #signUp {
+        position: absolute;
+        width: calc(100% - 24px);
+        top: calc(20vh + 30px);
+        left: 150vw;
+        color: black;
+        transition: all 0.3s ease;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        -o-transition: all 0.3s ease;
+        -ms-transition: all 0.3s ease;
+    }
+    input::placeholder {
+        color: rgba(0,0,0,.55) !important;
+    }
+    .sidebarContent {
+        position: static;
+    }
+    .sidebarButton {
+        border: none;
+        background: #487cdc;
+        background-color: #487cdc;
+    }
+    .sidebarButton:hover {
+        background-color: #6390e1;
+    }
+    #logoOnly {
+        position: absolute;
+        left: 50%;
+        top: calc(50% - 24px);
+        transform: translate(-50%, -50%);
+        width: 7vh;
+        height: 7vh;
+        max-width: 50px;
+        max-height: 50px;
+    }
+    .centerCard {
+        overflow: visible;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        transform: none;
+        border-radius: 0;
+        box-shadow: none;
+        background: none;
+    }
+    .centerCardContent {
+        width: 100vw !important;
+        padding-left: 12px;
+        padding-right: 12px;
+        top: calc(20vh + 30px);
+        left: 50% !important;
+        transform: translateX(-50%);
+    }
+    #backgroundSquare, #backgroundCircle {
+        display: none;
+    }
+
+    /* Low Height Displays */
+    @media only screen and (max-height: 700px) {
+        #signUp, .centerCardContent {
+            top: calc(20vh + 10px);
+        }
+    }
+}
+
+/* Low Height Displays */
+@media only screen and (max-height: 700px) {
+    input {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
