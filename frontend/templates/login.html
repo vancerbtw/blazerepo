@@ -83,7 +83,7 @@
                           <a href="https://blazerepo.com/auth/google?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/google.svg"></a>
                           <a href="https://blazerepo.com/auth/twitter?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/twitter.svg"></a>
                         </div>
-                        <form action="/universalLogin?redirect=" method="POST">
+                        <form action="/auth/login?redirect={{redirect}}" method="POST">
                             <div>
                                 <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" value="<%- email %>">
                             </div>

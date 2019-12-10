@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="blaze" uuid="d8d752fd-f5bc-46b4-930c-a12befced801">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://blaze-database-do-user-6085330-0.db.ondigitalocean.com:25060/repo</jdbc-url>
+    </data-source>
+  </component>
+</project>
