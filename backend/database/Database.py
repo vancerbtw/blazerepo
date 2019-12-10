@@ -29,8 +29,8 @@ class Database:
             return user[0]
         return
 
-    def insert_package(self, package: str = None):
-        self.session.add(Package(package, "supremevance123"))
+    def insert_package(self, package: str = None, price: float = 0.00):
+        self.session.add(Package(package, "supremevance123", price))
         self.session.commit()
 
     def add_download(self, package: str = None):

@@ -1,15 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
-from authlib.integrations.flask_client import OAuth
-from dotenv import load_dotenv
-import os
-
-# importing auth and modules
-from helpers.Authentication import Authentication
-from models.User import User
-from models.Package import get_total_downloads
-
-# importing database class
-from database.Database import Database
+from imports import *
 
 load_dotenv()  # importing credentials
 
@@ -33,7 +22,7 @@ def root():
         if user := session['user']:
             username = user.get("username", "")
 
-    return render_template("index.html", user=user, )
+    return render_template("index.html", user=user, username=username)
 
 
 @app.route("/login")
@@ -97,9 +86,9 @@ def present_account():
     }
 
 
-@app.route("/add/package/<package>")
-def add_package(package):
-    db.insert_package(package)
+@app.route("/add/package/<package>/<price>")
+def add_package(package, price):
+    db.insert_package(package, float(price))
     return {
         "inserted!": "done"
     }

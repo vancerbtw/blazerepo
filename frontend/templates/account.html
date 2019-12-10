@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BlazeRepo | Account</title>
+        <link rel="stylesheet" type="text/css" href="account.css">
+    </head>
+    <body>
+
+        <div id="backgroundCircle"></div>
+        <div id="backgroundSquare"></div>
+
+        <div class="centerCard">
+            <div class="sidebar">
+                <img src="blazerepo.png" id="logo">
+                <div id="profilePicture"></div>
+                <p id="username"></p>
+                <p id="email"></p>
+                <p id="userId"></p>
+                <div id="glyphButtonContainer">
+                    <div id="editButton" style="background-image: url('icons/pencil.svg')" onclick="goToDetails()"></div>
+                </div>
+                <div class="sidebarButton" onclick="signout()">Sign Out</div>
+            </div>
+            <div class="centerCardContent">
+
+                <p class="cardTitle">Account Balance</p>
+
+                <div class="contentCard" id="walletCard">
+                    <h1 id="walletTitle">Wallet</h1>
+                    <p id="date"></p>
+                    <p id="balance"></p>
+                    <div class="cardBottomButton" onclick="addFunds()">Add Funds</div>
+                </div>
+
+                <div class="column" style="padding-right: 10px;">
+                        <p class="cardTitle">Linked Accounts</p>
+
+                        <div id="linkedServices" class="cardScrollerList">
+                            <div class="smallListCard unlinkedAccount" style="background-image: url('https://blazerepo.com/logo.svg'); background-size: 20px;" id="blaze" onclick="linkBlaze(this)">
+                                Blaze
+                                <div class="accountsAddIcon"></div>
+                            </div>
+                            <div class="smallListCard unlinkedAccount" style="background-image: url('socials/twitter.svg')" id="twitter" onclick="linkAccount(this)">
+                                Twitter
+                                <div class="accountsAddIcon"></div>
+                            </div>
+                            <div class="smallListCard unlinkedAccount" style="background-image: url('socials/github.svg')" id="github" onclick="linkAccount(this)">
+                                Github
+                                <div class="accountsAddIcon"></div>
+                            </div>
+                            <div class="smallListCard unlinkedAccount" style="background-image: url('socials/google.svg')" id="google" onclick="linkAccount(this)">
+                                Google
+                                <div class="accountsAddIcon"></div>
+                            </div>
+                            <div class="smallListCard unlinkedAccount" style="background-image: url('socials/discord.svg')" id="discord" onclick="linkAccount(this)">
+                                Discord
+                                <div class="accountsAddIcon"></div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="column" style="padding-left: 10px;">
+                    <p class="cardTitle">Purchases</p>
+                        <div id="purchases" class="cardScrollerList">
+                                <% purchases.forEach( purchase => { %>
+                                    <div class="smallListCard" style="background-image: url('https://blazerepo.com/images/tweak.png');">
+                                        <p class="purchasedTweakName"><%= purchase.tweakName %></p>
+                                        <p class="purchasedTweakDate"><%= purchase.date %></p>
+                                    </div>
+                                <% }) %>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+        <script>
+          let avatar = "<%- avatar %>"
+          let name = "<%- username %>"
+          let email = "<%- email %>"
+          let balance = <%- balance %>
+          let linkedAccounts = <%- JSON.stringify(linkedAccounts) %>
+          let userId = "<%- userId %>"
+
+          const urlParams = new URLSearchParams(window.location.search);
+          const error = urlParams.get('error');
+          if (error) {
+              alert(error)
+          }
+        </script>
+        <script src="account.js"></script>
+    </body>
+</html>
