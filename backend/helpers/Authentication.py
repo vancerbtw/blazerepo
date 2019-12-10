@@ -19,20 +19,14 @@ class Authentication:
 
     def register_check(self, name, email, password, password_confirm, db):
         if name == "" or email == "" or password == "" or password_confirm == "":
-            return {
-                "error": "All fields must have an inputted value."
-            }
+            return "All fields must have an inputted value."
         if not db.user_exists(email):
             if password == password_confirm:
                 return User(name, email, False, self.get_password_hash(password))
             else:
-                return {
-                    "error": "Passwords do not match."
-                }
+                return "Passwords do not match."
         else:
-            return {
-                "error": "User with same email is already registered."
-            }
+            return "User with same email is already registered."
 
     def login(self, email, password, db):
         if user := db.get_user(email):

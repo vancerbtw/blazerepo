@@ -58,12 +58,12 @@ def present_login(request: Request, redirect="https://blazerepo.com"):
 
 
 @app.post("/auth/login")
-def authenticate_local(*, request: Request, email: str = Form(...), password: str = Form(...),
-                       redirect="https://blazerepo.com"):
+def authenticate_local(*, request: Request, email: str = Form(...), password: str = Form(...), redirect="https://blazerepo.com"):
     if token := auth.login(email, password, db):
         if type(token) == str:
             print(redirect)
             response = RedirectResponse(url=f"{'/account'}")
+            print(token)
             response.set_cookie(
                 "Authorization",
                 value=f"Bearer {token}",
@@ -78,14 +78,13 @@ def authenticate_local(*, request: Request, email: str = Form(...), password: st
 
 
 @app.post("/register")
-async def register_local(request: Request, name: str = Form(...), email: str = Form(...), password: str = Form(...),
-                         password2: str = Form(...), redirect="https://blazerepo.com"):
+async def register_local(request: Request, name: str = Form(...), email: str = Form(...), password: str = Form(...), password2: str = Form(...), redirect="https://blazerepo.com"):
     if user := auth.register_check(name, email, password, password2, db):
         if isinstance(user, User):
             db.add_user(user)
             return RedirectResponse(url=f"/login?showSignUp=true&success=User Successfully Registered")
-        raise HTTPException(status_code=401, detail=f"{user['error']}")
-    raise HTTPException(status_code=401, detail=f"{user['error']}")
+        raise HTTPException(status_code=401, detail=f"{user}")
+    raise HTTPException(status_code=401, detail=f"{user}")
 
 
 @app.get("/account")
