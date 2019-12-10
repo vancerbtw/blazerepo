@@ -1,8 +1,5 @@
-from typing import List
 from sqlalchemy import Column, Integer, String, BOOLEAN
-from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
-from pydantic import BaseModel, constr
 import os, binascii
 
 Base = declarative_base()

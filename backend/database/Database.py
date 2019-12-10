@@ -2,6 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, String, MetaData
 from sqlalchemy.orm import sessionmaker
 from models.User import User, Base
+from models.Package import Package, Base
+import datetime
 
 
 class Database:
@@ -26,3 +28,19 @@ class Database:
             print(user)
             return user[0]
         return
+
+    def insert_package(self, package: str = None):
+        self.session.add(Package(package, "supremevance123"))
+        self.session.commit()
+
+    def add_download(self, package: str = None):
+        if downloads := self.session.query(Package).filter(Package.packageid == package).all():
+            if len(downloads) > 0:
+                downloads[0].downloads.append(datetime.date.today())
+                self.session.commit()
+                return
+
+    def get_downloads(self, package):
+        if downloads := self.session.query(Package).filter(Package.packageid == package).all():
+            if len(downloads) > 0:
+                return downloads[0].downloads

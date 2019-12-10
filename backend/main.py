@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, session, redirect
+from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 import os
 
 # importing auth and modules
 from helpers.Authentication import Authentication
 from models.User import User
+from models.Package import get_total_downloads
 
 # importing database class
 from database.Database import Database
@@ -19,8 +21,9 @@ app = Flask(__name__,
 app.secret_key = os.getenv("JWT_SECRET")
 
 auth = Authentication(os.getenv("JWT_SECRET"))
-
+oauth = OAuth(app)
 db = Database(os.getenv("DB_URI"))
+
 
 @app.route("/")
 def root():
@@ -36,8 +39,10 @@ def root():
 @app.route("/login")
 def present_login():
     if session.get('user', None) is None:
-        return render_template("login.html", redirect=request.args.get('redirect', default="https://blazerepo.com/", type=str))
+        return render_template("login.html",
+                               redirect=request.args.get('redirect', default="https://blazerepo.com/", type=str))
     return redirect(request.args.get('redirect', default="https://blazerepo.com/", type=str), code=302)
+
 
 @app.route("/logout")
 def logout():
@@ -66,6 +71,8 @@ def authenticate_local():
     raise {
         "error": "Internal Server Error."
     }
+
+
 #
 #
 @app.route("/register", methods=['POST'])
@@ -88,6 +95,31 @@ def present_account():
     return {
         "test": "Test!"
     }
+
+
+@app.route("/add/package/<package>")
+def add_package(package):
+    db.insert_package(package)
+    return {
+        "inserted!": "done"
+    }
+
+
+@app.route("/add/downloads/<package>")
+def add_downloads(package):
+    db.add_download(package)
+    return {
+        "done": True
+    }
+
+
+@app.route("/check/downloads/<package>/<days>")
+def check_downloads(package, days):
+    if total := get_total_downloads(db, package, int(days)):
+        return {
+            "total": total
+        }
+
 
 if __name__ == '__main__':
     app.run()
