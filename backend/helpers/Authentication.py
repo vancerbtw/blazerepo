@@ -31,17 +31,7 @@ class Authentication:
     def login(self, email, password, db):
         if user := db.get_user(email):
             if self.verify_password(password, user.password):
-                token = jwt.encode({
-                    "email": user.email,
-                    "username": user.username,
-                    "verified": user.verified,
-                    "disabled": user.disabled
-                }, self.secret, algorithm='HS256')
-                return str(token)
-            return {
-                "error": "Password is incorrect."
-            }
-        return {
-            "error": "Invalid email address."
-        }
+                return user
+            return "Password is incorrect."
+        return "Invalid email address."
 
