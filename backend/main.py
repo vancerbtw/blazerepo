@@ -7,7 +7,6 @@ from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 from dotenv import load_dotenv
 import os
-import jwt
 
 # importing auth and modules
 from helpers.Authentication import Authentication
@@ -39,8 +38,7 @@ db = Database(os.getenv("DB_URI"))
 def get_current_user(request: Request):
     if auth_token := request.cookies.get("Authorization"):
         if token := auth_token[8:-1]:
-            print(token)
-            if current_user := jwt.decode(token, os.getenv("JWT_SECRET"), algorithm='HS256'):
+            if current_user := jwt.decode(token, self.secret, algorithm='HS256'):
                 if not current_user["disabled"]:
                     return current_user
                 return  # disabled user
@@ -58,12 +56,12 @@ def present_login(request: Request, redirect="https://blazerepo.com"):
 
 
 @app.post("/auth/login")
-def authenticate_local(*, request: Request, email: str = Form(...), password: str = Form(...), redirect="https://blazerepo.com"):
+def authenticate_local(*, request: Request, email: str = Form(...), password: str = Form(...),
+                       redirect="https://blazerepo.com"):
     if token := auth.login(email, password, db):
         if type(token) == str:
             print(redirect)
             response = RedirectResponse(url=f"{'/account'}")
-            print(token)
             response.set_cookie(
                 "Authorization",
                 value=f"Bearer {token}",
@@ -78,13 +76,14 @@ def authenticate_local(*, request: Request, email: str = Form(...), password: st
 
 
 @app.post("/register")
-async def register_local(request: Request, name: str = Form(...), email: str = Form(...), password: str = Form(...), password2: str = Form(...), redirect="https://blazerepo.com"):
+async def register_local(request: Request, name: str = Form(...), email: str = Form(...), password: str = Form(...),
+                         password2: str = Form(...), redirect="https://blazerepo.com"):
     if user := auth.register_check(name, email, password, password2, db):
         if isinstance(user, User):
             db.add_user(user)
             return RedirectResponse(url=f"/login?showSignUp=true&success=User Successfully Registered")
-        raise HTTPException(status_code=401, detail=f"{user}")
-    raise HTTPException(status_code=401, detail=f"{user}")
+        raise HTTPException(status_code=401, detail=f"{user['error']}")
+    raise HTTPException(status_code=401, detail=f"{user['error']}")
 
 
 @app.get("/account")
