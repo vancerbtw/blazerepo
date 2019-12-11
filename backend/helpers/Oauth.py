@@ -1,5 +1,7 @@
-from flask import session, redirect, url_for, request
+from flask import request, session, redirect
 from rauth import OAuth2Service, OAuth1Service
+from models.User import User, verify_email_send
+from models.Twitter import Twitter
 
 class OAuthSignIn(object):
     providers = None
@@ -18,15 +20,6 @@ class OAuthSignIn(object):
     def get_callback_url(self):
         return url_for('oauth_callback', provider=self.provider_name,
                        _external=True)
-
-    @classmethod
-    def get_provider(self, provider_name):
-        if self.providers is None:
-            self.providers = {}
-            for provider_class in self.__subclasses__():
-                provider = provider_class()
-                self.providers[provider.provider_name] = provider
-        return self.providers[provider_name]
 
 
 class TwitterSignIn(OAuthSignIn):
@@ -47,9 +40,44 @@ class TwitterSignIn(OAuthSignIn):
         session['request_token'] = request_token
         return redirect(self.service.get_authorize_url(request_token[0]))
 
-    def callback(self):
+    def callback(self, db):
         request_token = session.pop('request_token')
         if 'oauth_verifier' not in request.args:
             return
         twitter_response = self.service.get_auth_session(request_token[0], request_token[1], data={'oauth_verifier': request.args['oauth_verifier']}).get('account/verify_credentials.json', params={'include_email':'true'}).json()
-        return twitter_response['id_str'], twitter_response['screen_name'], twitter_response['email']
+        if db.check_twitter(twitter_response['id_str']):
+            user_id = None
+            if db.user_exists(twitter_response['email']) is False:
+                user_id = db.add_user(User(twitter_response['screen_name'], twitter_response['email'], False))
+                verify_email_send(twitter_response['email'])
+            else:
+                return "A Blaze account is already using the email associated with this twitter, please link this account in the account settings."
+            print(user_id)
+            db.add_twitter(Twitter(twitter_response['id_str'], twitter_response['email'], twitter_response['screen_name'], user_id))
+            user = db.get_user_by_id(user_id)
+            return {
+                "id": user.id,
+                "username": user.username,
+                "disabled": user.disabled,
+                "verified": user.verified,
+                "profile_pic": user.profile_pic,
+                "admin": user.admin,
+                "developer": user.developer
+            }
+        else:
+            if user_id := db.twitter_user_id(twitter_response['id_str']):
+                user = db.get_user_by_id(user_id)
+                return {
+                    "id": user.id,
+                    "username": user.username,
+                    "disabled": user.disabled,
+                    "verified": user.verified,
+                    "profile_pic": user.profile_pic,
+                    "admin": user.admin,
+                    "developer": user.developer
+                }
+            return "Internal server error"
+
+
+
+

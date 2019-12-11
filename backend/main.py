@@ -59,7 +59,8 @@ def authenticate_local():
                 "username": user.username,
                 "email": user.email,
                 "disabled": user.disabled,
-                "verified": user.verified
+                "verified": user.verified,
+                "admin": user.admin
             }
             return redirect(redirect_url, code=302)
         return {
@@ -86,17 +87,18 @@ def register_local():
 
 @app.route("/auth/twitter")
 def auth_twitter():
+    session['redirect'] = request.args.get('redirect', default="https://blazerepo.com/", type=str)
     return TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).authorize()
 
 
 @app.route("/auth/callback/twitter")
 def auth_twitter_callback():
-    id, name, email = TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).callback()
-    return {
-        "id": id,
-        "name": name,
-        "email": email
-    }
+    user = TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).callback(db)
+    if isinstance(user, str):
+        return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
+    session['user'] = user
+    print(user)
+    return redirect(session['redirect'], code=302)
 
 
 @app.route("/account")

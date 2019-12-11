@@ -1,19 +1,13 @@
 from sqlalchemy import Column, Integer, String, BOOLEAN, Date, cast, DECIMAL
 from sqlalchemy.dialects.postgresql import ARRAY
-from sqlalchemy.ext.declarative import declarative_base
 from database.MutableList import MutableList
 import datetime
-
-Base = declarative_base()
+from database.Base import Base
 
 
 def get_total_downloads(db, package, days_back):
     if downloads := db.get_downloads(package):
-        return len([download for download in
-                    [datetime.datetime.strptime(download_date, '%Y-%m-%d').date() for download_date in downloads] if (
-                                datetime.datetime.now() - datetime.timedelta(
-                            days=days_back)).date() <= download <= datetime.date.today()])
-    print('return here')
+        return len([download for download in [datetime.datetime.strptime(download_date, '%Y-%m-%d').date() for download_date in downloads] if (datetime.datetime.now() - datetime.timedelta(days=days_back)).date() <= download <= datetime.date.today()])
     return 0
 
 

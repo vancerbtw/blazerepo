@@ -36,10 +36,10 @@
                       <h1>Create Account</h1>
 
                       <div class="glyphContainer">
-                          <a href="https://blazerepo.com/auth/discord?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/discord.svg"></a>
-                          <a href="https://blazerepo.com/auth/github?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/github.svg"></a>
-                          <a href="https://blazerepo.com/auth/google?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/google.svg"></a>
-                          <a href="https://blazerepo.com/auth/twitter?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/twitter.svg"></a>
+                          <a href="/auth/discord?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/discord.svg"></a>
+                          <a href="/auth/github?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/github.svg"></a>
+                          <a href="/auth/google?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/google.svg"></a>
+                          <a href="/auth/twitter?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/twitter.svg"></a>
                       </div>
                       <form action="/register" method="POST">
                           <div>
@@ -49,14 +49,14 @@
                             <input type="email" id="email" name="email" class="form-control" placeholder="Email Address" value="">
                           </div>
                           <div>
-                          </br>
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Create Password" value="">
-                          </div>
-                          <div>
                             <input type="password" id="password2" name="password2" class="form-control" placeholder="Confirm Password" value="">
                           </div>
                           <button type="submit" class="sidebarButton">
                             Register
+                          </br>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Create Password" value="">
+                          </div>
+                          <div>
                           </button>
                       </form>
                   </div>
@@ -78,10 +78,10 @@
                         <h1>Sign In</h1>
 
                         <div class="glyphContainer">
-                          <a href="https://blazerepo.com/auth/discord?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/discord.svg"></a>
-                          <a href="https://blazerepo.com/auth/github?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/github.svg"></a>
-                          <a href="https://blazerepo.com/auth/google?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/google.svg"></a>
-                          <a href="https://blazerepo.com/auth/twitter?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/twitter.svg"></a>
+                          <a href="/auth/discord?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/discord.svg"></a>
+                          <a href="/auth/github?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/github.svg"></a>
+                          <a href="/auth/google?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/google.svg"></a>
+                          <a href="/auth/twitter?redirect={{redirect}}" class="glyphIcon"><img src="/static/img/socials/twitter.svg"></a>
                         </div>
                         <form action="/auth/login?redirect={{redirect}}" method="POST">
                             <div>
