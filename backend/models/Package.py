@@ -2,7 +2,6 @@ from sqlalchemy import Column, Integer, String, BOOLEAN, Date, cast, DECIMAL
 from sqlalchemy.dialects.postgresql import ARRAY
 from sqlalchemy.ext.declarative import declarative_base
 from database.MutableList import MutableList
-import numpy as np
 import datetime
 
 Base = declarative_base()

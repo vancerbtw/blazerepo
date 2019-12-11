@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, String, MetaData
 from sqlalchemy.orm import sessionmaker
-from models.User import User, Base
+from models.User import User, Purchase, Base
 from models.Package import Package, Base
 import datetime
 
@@ -44,3 +44,19 @@ class Database:
         if downloads := self.session.query(Package).filter(Package.packageid == package).all():
             if len(downloads) > 0:
                 return downloads[0].downloads
+
+    def add_purchase(self, user, processor, package, price, discount):
+        if len(self.session.query(Purchase).filter(Purchase.purchaser_id == user.id and Purchase.package == package).all()) <= 0:
+            self.session.add(Purchase(user["id"], processor, package, price, discount))
+            return True
+        return False
+
+    def is_package(self, package):
+        if len(self.session.query(Package).filter(Package.packageid == package).all()) > 0:
+            return True
+        return False
+
+    def info_package(self, package):
+        if package := self.session.query(Package).filter(Package.packageid == package).all()[0]:
+            return package
+        return

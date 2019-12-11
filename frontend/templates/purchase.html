@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>BlazeRepo | Transaction</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/purchase.css">
+    </head>
+    <body>
+<div id='acc'>
+   
+    <div id="accountDetails">
+        <img id="accountImage">
+        <span id="accountName"></span>
+    </div>
+
+
+</div>
+      
+
+        <div id="wrapper">
+
+            <!-- Top Info -->
+            <div id="topContainer">
+                <div class="topCard">
+                    <h1>Total Balance</h1>
+                    <div class="topCardInner">
+                        <span id="balance">$0.00</span>
+                        <p id="newBalance">$0.00</p>
+                    </div>
+                </div>
+
+                
+                    <div class="topCard">
+                
+           
+                        
+                        <div class="topCardInner">
+                            <img src="/static/img/icons/gift.svg" align="top" class="nani">
+                    
+                        </div>
+                    
+                </div>
+            </div>
+
+            <!-- Cards -->
+            <div id="cardsContainer">
+                <div class="card">
+                    <div class="cardTop" onclick="bringCardToFront(this)">
+                        <img src="/static/img/icons/paypal.svg">
+                    </div>
+                    <div class="cardScroller">
+                            <div class="transactionList"></div>
+                            <div class="purchaseButton" onclick="post({package: package});">Purchase</div>
+                            <div class="purchaseButton" onclick="cancel();">Cancel</div>
+                    </div>
+                </div>
+                <div class="card">
+                        <div class="cardTop" onclick="bringCardToFront(this)">
+                            <img src="/static/img/icons/blockchain.svg">
+                        </div>
+                        <div class="cardScroller">
+                                <div class="transactionList blockChain"></div>
+                                <div class="purchaseButton" onclick="postCrypto({package: package});">Purchase</div>
+                                <div class="purchaseButton" onclick="cancel();">Cancel</div>
+                        </div>
+                    </div>
+                <!-- <div class="card">
+                    <div class="cardTop" onclick="bringCardToFront(this)">
+                        <img src="/img/stripe.svg">
+                    </div>
+                    <div class="cardScroller">
+                        <div class="purchaseButton">Coming Soon!</div>
+                    </div>
+                </div> -->
+            </div>
+
+            <!-- Purchase Button -->
+            <div class="purchaseButton">Purchase</div>
+
+        </div>
+    </body>
+    <script>
+        {% autoescape off %}
+        var user = {{ user|tojson }}
+        var accountProfileImg = user.avatar
+        var accountName = user.name
+
+        var currencyRegion = "en-US"
+        var currencyType = "USD"
+
+        var blazeBalance = 100.00
+        var purchases = JSON.parse('<%-JSON.stringify(purchases)%>').purchases
+        var package = "{{ packageid }}"
+        var isSileo = JSON.parse('<%-JSON.stringify(sileo)%>').sileo 
+        var isCydia = JSON.parse('<%-JSON.stringify(cydia)%>').cydia
+        var gift = {{ gift }}
+        var giftUser = "{{ giftUser }}"
+        var token = "{{ token }}"
+        var userId = "<%- userId %>"
+
+        function cancel(method='post') {
+          if (isSileo) {
+            window.location.href = "sileo://payment_completed";
+          }
+          if (isCydia) {
+              window.location.href = "cydia://"
+          }
+        }
+
+        function post(params, method='post') {
+
+          if (isSileo) {
+            return location.href = `https://blazerepo.com/api/sileo/transaction/${package}/paypal/start?token=${token}`
+          }
+          if (isCydia) {
+            return location.href = `https://blazerepo.com/api/cydia/transaction/paypal/start?package=${package}&userId=${userId}`
+          }
+          if (gift) {
+            return location.href = `https://blazerepo.com/api/transaction/gift/${package}/paypal/start?recip=${giftUser}`
+          }
+
+          // The rest of this code assumes you are not using a library.
+          // It can be made less wordy if you use one.
+          const form = document.createElement('form');
+          form.method = method;
+          form.action = `/api/transaction/${package}/paypal/start/`;
+
+          for (const key in params) {
+            if (params.hasOwnProperty(key)) {
+              const hiddenField = document.createElement('input');
+              hiddenField.type = 'hidden';
+              hiddenField.name = key;
+              hiddenField.value = params[key];
+
+              form.appendChild(hiddenField);
+            }
+          }
+
+          document.body.appendChild(form);
+          form.submit();
+        }
+        function postCrypto(params, method='get') {
+            location.href = `https://blazerepo.com/crypto/warning/${package}`;
+            }
+        // var purchases = [
+        //     {
+        //         "Name":"Glance",
+        //         "Price":1.49,
+        //         "Developer":"Kushy",
+        //         "Icon":"https://repo.packix.com/api/Packages/5d556fc6121f7a001461dc2f/icon/download?size=medium",
+        //     }
+        //     ,{
+        //         "Name":"Eclipse 12",
+        //         "Price":1.5,
+        //         "Developer":"Guillermo Moran",
+        //         "Icon":"https://repo.packix.com/api/Packages/5c747f1c43b60e0018b15117/icon/download?size=medium",
+        //     }
+        //     ,{
+        //         "Name":"Generic Icon Test",
+        //         "Price":0,
+        //         "Developer":"PINPAL",
+        //     }
+        // ]
+        {% endautoescape %}
+
+    </script>
+    <script src="/static/js/purchase.js"></script>
+</html>

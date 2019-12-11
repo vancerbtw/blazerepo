@@ -13,6 +13,13 @@ auth = Authentication(os.getenv("JWT_SECRET"))
 oauth = OAuth(app)
 db = Database(os.getenv("DB_URI"))
 
+app.config['OAUTH_CREDENTIALS'] = {
+    'twitter': {
+        'id': os.getenv('TWITTER_ID'),
+        'secret': os.getenv('TWITTER_SECRET')
+    }
+}
+
 
 @app.route("/")
 def root():
@@ -48,6 +55,7 @@ def authenticate_local():
     if user := auth.login(email, password, db):
         if type(user) != str:
             session['user'] = {
+                "id": user.id,
                 "username": user.username,
                 "email": user.email,
                 "disabled": user.disabled,
@@ -62,8 +70,6 @@ def authenticate_local():
     }
 
 
-#
-#
 @app.route("/register", methods=['POST'])
 def register_local():
     name = request.form.get('name')
@@ -78,9 +84,23 @@ def register_local():
     return user
 
 
+@app.route("/auth/twitter")
+def auth_twitter():
+    return TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).authorize()
+
+
+@app.route("/auth/callback/twitter")
+def auth_twitter_callback():
+    id, name, email = TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).callback()
+    return {
+        "id": id,
+        "name": name,
+        "email": email
+    }
+
+
 @app.route("/account")
 def present_account():
-    print(session['test1'])
     return {
         "test": "Test!"
     }
@@ -96,7 +116,8 @@ def add_package(package, price):
 
 @app.route("/add/downloads/<package>")
 def add_downloads(package):
-    db.add_download(package)
+    for i in range(1000):
+        db.add_download(package)
     return {
         "done": True
     }
@@ -108,6 +129,23 @@ def check_downloads(package, days):
         return {
             "total": total
         }
+
+
+@app.route("/purchase/<packageid>")
+def purchase_page(packageid):
+    if user := session['user']:
+        print(user)
+        if db.is_package(packageid):
+            if package := db.info_package(packageid):
+                return render_template("purchase.html", gift=False, packageid=packageid, giftUser="", token="",
+                                       userId="", user=user)
+            return {
+                "Irror": "Could not locate package info."
+            }
+        return {
+            "Error": f"Package: {packageid} does not exist"
+        }
+    return redirect(f"/login?redirect=/purchase/{packageid}", code=302)
 
 
 if __name__ == '__main__':
