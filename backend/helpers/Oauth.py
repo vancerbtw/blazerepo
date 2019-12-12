@@ -5,6 +5,8 @@ from models.Twitter import Twitter
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from models.Google import Google
+from models.Discord import Discord
+from flask_discord import DiscordOAuth2Session, configs
 
 class OAuthSignIn():
     providers = None
@@ -118,6 +120,55 @@ class GoogleSignIn(OAuthSignIn):
             }
         else:
             if user_id := db.google_user_id(google_user['id']):
+                user = db.get_user_by_id(user_id)
+                return {
+                    "id": user.id,
+                    "username": user.username,
+                    "disabled": user.disabled,
+                    "verified": user.verified,
+                    "profile_pic": user.profile_pic,
+                    "admin": user.admin,
+                    "developer": user.developer
+                }
+            return "Internal server error"
+
+class DiscordSignIn():
+    def __init__(self, app):
+        self.auth = DiscordOAuth2Session(app)
+
+    def authorize(self):
+        return self.auth.create_session(['identify', 'email'])
+
+    def build_session(self):
+        if request.values.get("error"):
+            return request.values["error"]
+        session["DISCORD_OAUTH2_TOKEN"] = self.auth._make_session(state=session.get("DISCORD_OAUTH2_STATE")).fetch_token(configs.TOKEN_URL, client_secret=self.auth.client_secret, authorization_response=request.url)
+
+    def callback(self, db):
+        if error := self.build_session():
+            return error
+        discord_user = self.auth.fetch_user()
+        discord_user.id = str(discord_user.id)
+        if db.check_discord(discord_user.id):
+            user_id = None
+            if db.user_exists(discord_user.email) is False:
+                user_id = db.add_user(User(discord_user.username, discord_user.email, False))
+                verify_email_send(discord_user.email)
+            else:
+                return "A Blaze account is already using the email associated with this Google account, please link this account on the account settings page."
+            db.add_discord(Discord(discord_user, user_id))
+            user = db.get_user_by_id(user_id)
+            return {
+                "id": user.id,
+                "username": user.username,
+                "disabled": user.disabled,
+                "verified": user.verified,
+                "profile_pic": user.profile_pic,
+                "admin": user.admin,
+                "developer": user.developer
+            }
+        else:
+            if user_id := db.discord_user_id(discord_user.id):
                 user = db.get_user_by_id(user_id)
                 return {
                     "id": user.id,

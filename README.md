@@ -12,9 +12,14 @@ Here is a list of the API keys you will need:
 * A Twitter OAuth1 Credentials Secret
 * A Google OAuth2 Credentials ID 
 * A Google OAuth2 Credentials Secret
+* A Discord OAuth2 Client ID
+* A Discord OAuth2 Client Secret
 
 Once you have set up your Twitter developer account your Twitter API App can be initialized [Here](https://developer.twitter.com/en/apps)
 You can generate your Google OAuth2 credentials [Here](https://console.cloud.google.com/apis/credentials) after creating a project on the Google Cloud platform.
+A Discord application may be made [Here](https://discordapp.com/developers/applications) after creating an application you may retrieve your credentials.
+All services will require a callback url to be set. All callback URLs will be set to: ``https://localhost:5000/auth/callback/<service_name>``
+Example: ``https://localhost:5000/auth/callback/discord``
 
 A PostgreSQL databse will need to initialized and setup before initializing your Blaze Repo API web server instance. You can run your database locally or in the cloud.
 * [Setting up a database locally on Windows](https://www.microfocus.com/documentation/idol/IDOL_12_0/MediaServer/Guides/html/English/Content/Getting_Started/Configure/_TRN_Set_up_PostgreSQL.htm)

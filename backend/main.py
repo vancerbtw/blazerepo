@@ -24,16 +24,15 @@ app.config['OAUTH_CREDENTIALS'] = {
     }
 }
 
+app.config["DISCORD_CLIENT_ID"] = os.getenv("DISCORD_ID")  # Discord client ID.
+app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_SECRET")  # Discord client secret.
+app.config["DISCORD_REDIRECT_URI"] = "https://localhost:5000/auth/callback/discord"  # Redirect URI.
+
+
 
 @app.route("/")
 def root():
-    user = None
-    username = ""
-    if session.get('user', None):
-        if user := session['user']:
-            username = user.get("username", "")
-
-    return render_template("index.html", user=user, username=username)
+    return render_template("index.html", user=session['user'])
 
 
 @app.route("/login")
@@ -119,6 +118,22 @@ def auth_google_callback():
     session['user'] = user
     return redirect(session['redirect'], code=302)
 
+@app.route("/auth/discord")
+def auth_discord():
+    session['redirect'] = request.args.get('redirect', default="https://blazerepo.com/", type=str)
+    return DiscordSignIn(app).authorize()
+
+
+@app.route("/auth/callback/discord")
+def auth_discord_callback():
+    user = DiscordSignIn(app).callback(db)
+    if isinstance(user, str):
+        return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
+    session['user'] = user
+    print(user)
+    return redirect(session['redirect'], code=302)
+
+
 @app.route("/users/me")
 def show_me():
     user = session['user']
@@ -180,6 +195,12 @@ def purchase_page(packageid):
             "Error": f"Package: {packageid} does not exist"
         }
     return redirect(f"/login?redirect=/purchase/{packageid}", code=302)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404
 
 
 if __name__ == '__main__':

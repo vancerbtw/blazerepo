@@ -7,6 +7,7 @@ from models.Purchase import Purchase
 from models.Twitter import Twitter
 from models.Package import Package
 from models.Google import Google
+from models.Discord import Discord
 import datetime
 
 
@@ -99,4 +100,19 @@ class Database:
     def google_user_id(self, id):
         if google := self.session.query(Google).filter(Google.google_id == id).all():
             return google[0].user_id
+        return
+
+
+    def add_discord(self, discord):
+        self.session.add(discord)
+        self.session.commit()
+
+    def check_discord(self, id):
+        if len(self.session.query(Discord).filter(Discord.discord_id == id).all()) <= 0:
+            return True
+        return False
+
+    def discord_user_id(self, id):
+        if discord := self.session.query(Discord).filter(Discord.discord_id == id).all():
+            return discord[0].user_id
         return

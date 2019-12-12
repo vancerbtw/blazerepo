@@ -22,6 +22,7 @@ class User(Base):
     developer = Column(BOOLEAN, unique=False, default=False)
     twitter = relationship("Twitter", backref="user", lazy='selectin')
     google = relationship("Google", backref="user", lazy='selectin')
+    discord = relationship("Discord", backref="user", lazy='selectin')
 
     def __init__(self, username, email, disabled, password=None):
         self.username = username

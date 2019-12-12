@@ -417,7 +417,7 @@ html, body {
   animation: slide 999s infinite;
   background-position:  45% center;
 
-  background-image: url('yeetpoop.png');
+  background-image: url('/static/img/slide_img.png');
   background-size: cover;
 
 
