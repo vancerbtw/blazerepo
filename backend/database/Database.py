@@ -32,45 +32,38 @@ class Database:
         return exists
 
     def get_user(self, email: str = None):
-        if user := self.session.query(User).filter(User.email == email).all():
-            print(user)
-            return user[0]
-        return
+        return self.session.query(User).filter(User.email == email).first()
 
     def get_user_by_id(self, id: int = None):
-        if user := self.session.query(User).filter(User.id == id).all():
-            return user[0]
-        return
+        return self.session.query(User).filter(User.id == id).first()
 
     def insert_package(self, package: str = None, price: float = 0.00):
         self.session.add(Package(package, "supremevance123", price))
         self.session.commit()
 
     def add_download(self, package: str = None):
-        if downloads := self.session.query(Package).filter(Package.packageid == package).all():
-            if len(downloads) > 0:
-                downloads[0].downloads.append(datetime.date.today())
-                self.session.commit()
-                return
+        if downloads := self.session.query(Package).filter(Package.packageid == package).first():
+            downloads.downloads.append(datetime.date.today())
+            self.session.commit()
+            return
 
     def get_downloads(self, package):
-        if downloads := self.session.query(Package).filter(Package.packageid == package).all():
-            if len(downloads) > 0:
-                return downloads[0].downloads
+        if downloads := self.session.query(Package).filter(Package.packageid == package).first():
+            return downloads.downloads
 
     def add_purchase(self, user, processor, package, price, discount):
-        if len(self.session.query(Purchase).filter(Purchase.purchaser_id == user.id and Purchase.package == package).all()) <= 0:
+        if self.session.query(Purchase).filter(Purchase.purchaser_id == user.id and Purchase.package == package).count() <= 0:
             self.session.add(Purchase(user["id"], processor, package, price, discount))
             return True
         return False
 
     def is_package(self, package):
-        if package := self.session.query(Package).filter(Package.packageid == package).all()[0]:
+        if package := self.session.query(Package).filter(Package.packageid == package).first():
             return package
         return
 
     def info_package(self, package):
-        if package := self.session.query(Package).filter(Package.packageid == package).all()[0]:
+        if package := self.session.query(Package).filter(Package.packageid == package).first():
             return package
         return
 
@@ -79,13 +72,13 @@ class Database:
         self.session.commit()
 
     def check_twitter(self, id):
-        if len(self.session.query(Twitter).filter(Twitter.twitter_id == id).all()) <= 0:
+        if self.session.query(Twitter).filter(Twitter.twitter_id == id).count() <= 0:
             return True
         return False
 
     def twitter_user_id(self, id):
-        if twitter := self.session.query(Twitter).filter(Twitter.twitter_id == id).all():
-            return twitter[0].user_id
+        if twitter := self.session.query(Twitter).filter(Twitter.twitter_id == id).first():
+            return twitter.user_id
         return
 
     def add_google(self, google):
@@ -93,13 +86,13 @@ class Database:
         self.session.commit()
 
     def check_google(self, id):
-        if len(self.session.query(Google).filter(Google.google_id == id).all()) <= 0:
+        if self.session.query(Google).filter(Google.google_id == id).count() <= 0:
             return True
         return False
 
     def google_user_id(self, id):
-        if google := self.session.query(Google).filter(Google.google_id == id).all():
-            return google[0].user_id
+        if google := self.session.query(Google).filter(Google.google_id == id).first():
+            return google.user_id
         return
 
 
@@ -108,11 +101,21 @@ class Database:
         self.session.commit()
 
     def check_discord(self, id):
-        if len(self.session.query(Discord).filter(Discord.discord_id == id).all()) <= 0:
+        if self.session.query(Discord).filter(Discord.discord_id == id).count() <= 0:
             return True
         return False
 
     def discord_user_id(self, id):
-        if discord := self.session.query(Discord).filter(Discord.discord_id == id).all():
-            return discord[0].user_id
+        if discord := self.session.query(Discord).filter(Discord.discord_id == id).first():
+            return discord.user_id
         return
+
+    def verify_user(self, session_user, token):
+        print(session_user)
+        if user := self.session.query(User).filter(User.email == session_user['email']).first():
+                if user.emailToken == token:
+                    user.verified == True
+                    self.session.commit()
+                    return True
+                return "Invalid Verification URL"
+        return "Internal Server Error"

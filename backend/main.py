@@ -27,7 +27,13 @@ app.config['OAUTH_CREDENTIALS'] = {
 app.config["DISCORD_CLIENT_ID"] = os.getenv("DISCORD_ID")  # Discord client ID.
 app.config["DISCORD_CLIENT_SECRET"] = os.getenv("DISCORD_SECRET")  # Discord client secret.
 app.config["DISCORD_REDIRECT_URI"] = "https://localhost:5000/auth/callback/discord"  # Redirect URI.
+app.config['MAIL_SERVER'] = os.getenv('EMAIL_SERVER')
+app.config['MAIL_PORT'] = os.getenv('EMAIL_PORT')
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('EMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS')
 
+mail = Mail(app)
 
 
 @app.route("/")
@@ -35,11 +41,18 @@ def root():
     return render_template("index.html", user=session['user'])
 
 
+@app.route("/email/test")
+def email_test():
+
+    return {
+        "done": True
+    }
+
+
 @app.route("/login")
 def present_login():
     if session.get('user', None) is None:
-        return render_template("login.html",
-                               redirect=request.args.get('redirect', default="https://blazerepo.com/", type=str))
+        return render_template("login.html", redirect=request.args.get('redirect', default="https://blazerepo.com/", type=str))
     return redirect(request.args.get('redirect', default="https://blazerepo.com/", type=str), code=302)
 
 
@@ -57,14 +70,7 @@ def authenticate_local():
     password = request.form.get('password')
     if user := auth.login(email, password, db):
         if type(user) != str:
-            session['user'] = {
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "disabled": user.disabled,
-                "verified": user.verified,
-                "admin": user.admin
-            }
+            session['user'] = make_session_user(user)
             return redirect(redirect_url, code=302)
         return {
             "error": user
@@ -76,16 +82,12 @@ def authenticate_local():
 
 @app.route("/register", methods=['POST'])
 def register_local():
-    name = request.form.get('name')
-    email = request.form.get('email')
-    password = request.form.get('password')
-    password2 = request.form.get('password2')
-    if user := auth.register_check(name, email, password, password2, db):
+    if user := auth.register_check(request.form.get('name'), request.form.get('email'), request.form.get('password'), request.form.get('password2'), db):
         if isinstance(user, User):
-            db.add_user(user)
-            return redirect("/login?showSignUp=true&success=User Successfully Registered", code=302)
+            auth.register_user(user, db, mail)
+            return redirect("/login?success=User Successfully Registered", code=302)
         return user
-    return user
+    return "Internal server error"
 
 
 @app.route("/auth/twitter")
@@ -96,7 +98,7 @@ def auth_twitter():
 
 @app.route("/auth/callback/twitter")
 def auth_twitter_callback():
-    user = TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).callback(db)
+    user = TwitterSignIn(app.config['OAUTH_CREDENTIALS']['twitter']).callback(db, mail)
     if isinstance(user, str):
         return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
     session['user'] = user
@@ -112,7 +114,7 @@ def auth_google():
 
 @app.route("/auth/callback/google")
 def auth_google_callback():
-    user = GoogleSignIn(app.config['OAUTH_CREDENTIALS']['google']).callback(db)
+    user = GoogleSignIn(app.config['OAUTH_CREDENTIALS']['google']).callback(db, mail)
     if isinstance(user, str):
         return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
     session['user'] = user
@@ -126,12 +128,26 @@ def auth_discord():
 
 @app.route("/auth/callback/discord")
 def auth_discord_callback():
-    user = DiscordSignIn(app).callback(db)
+    user = DiscordSignIn(app).callback(db, mail)
     if isinstance(user, str):
         return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
     session['user'] = user
     print(user)
     return redirect(session['redirect'], code=302)
+
+
+@app.route("/user/verify/<verify_token>")
+def verify_user(verify_token):
+    if user := session['user']:
+        if user['verified']:
+            return render_template("error.html", error="User is already verified", code=409)
+        if verification := db.verify_user(user, verify_token):
+            if verification:
+                user['verified'] = True
+                session['user'] = user
+                return "Verification Complete"
+            return render_template("error.html", error=verification, code=409)
+    return redirect(f'/login?redirect=/user/verify/{verify_token}')
 
 
 @app.route("/users/me")

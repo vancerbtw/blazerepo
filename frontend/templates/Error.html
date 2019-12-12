@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ code }} Error</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<style>
+    .dl-horizontal dt {
+        padding-right: 0.5em;
+        width: auto;
+    }
+
+    .dl-horizontal dd {
+        margin-left: auto;
+    }
+</style>
+<div class="container">
+	<div class="row">
+		 <div class="col-lg-12">
+			<div class="page-header">
+				<h1>{{ code }} Error</h1>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="alert alert-danger">
+				{{ error }}
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

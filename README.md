@@ -14,10 +14,12 @@ Here is a list of the API keys you will need:
 * A Google OAuth2 Credentials Secret
 * A Discord OAuth2 Client ID
 * A Discord OAuth2 Client Secret
+* A Zoho Email Account
 
 Once you have set up your Twitter developer account your Twitter API App can be initialized [Here](https://developer.twitter.com/en/apps)
 You can generate your Google OAuth2 credentials [Here](https://console.cloud.google.com/apis/credentials) after creating a project on the Google Cloud platform.
 A Discord application may be made [Here](https://discordapp.com/developers/applications) after creating an application you may retrieve your credentials.
+To receive a Blaze Repo email please contact me privately.
 All services will require a callback url to be set. All callback URLs will be set to: ``https://localhost:5000/auth/callback/<service_name>``
 Example: ``https://localhost:5000/auth/callback/discord``
 

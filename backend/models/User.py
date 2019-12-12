@@ -4,9 +4,6 @@ from sqlalchemy.orm import relationship
 import os, binascii
 from database.Base import Base
 
-def verify_email_send(email):
-    # send verify email
-    return
 
 class User(Base):
     __tablename__ = 'user'

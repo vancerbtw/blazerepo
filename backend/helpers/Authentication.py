@@ -4,6 +4,14 @@ from database.Database import Database
 from models.User import User
 from passlib.context import CryptContext
 from starlette.requests import Request
+from flask_mail import Message
+
+def make_session_user(user):
+    return {"id": user.id, "username": user.username, "email": user.email, "disabled": user.disabled, "verified": user.verified, "profile_pic": user.profile_pic, "admin": user.admin, "developer": user.developer}
+
+
+def verify_email_send(email, code, mail, name, sender):
+    mail.send(Message(subject="Blaze Email Verification", body=f"https://localhost:5000/user/verify/{code}", sender=("Blaze Repo", "noreply@blazerepo.com"), recipients=[email]))
 
 
 class Authentication:
@@ -35,3 +43,6 @@ class Authentication:
             return "Password is incorrect."
         return "Invalid email address."
 
+    def register_user(self, user, db, mail):
+        db.add_user(user)
+        verify_email_send(user.email, user.emailToken, mail)
