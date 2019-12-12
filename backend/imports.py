@@ -5,7 +5,7 @@ import os
 
 # importing auth and modules
 from helpers.Authentication import Authentication
-from helpers.Oauth import OAuthSignIn, TwitterSignIn
+from helpers.Oauth import OAuthSignIn, TwitterSignIn, GoogleSignIn
 from models.User import User
 from models.Package import get_total_downloads
 

@@ -6,6 +6,7 @@ from models.User import User
 from models.Purchase import Purchase
 from models.Twitter import Twitter
 from models.Package import Package
+from models.Google import Google
 import datetime
 
 
@@ -84,4 +85,18 @@ class Database:
     def twitter_user_id(self, id):
         if twitter := self.session.query(Twitter).filter(Twitter.twitter_id == id).all():
             return twitter[0].user_id
+        return
+
+    def add_google(self, google):
+        self.session.add(google)
+        self.session.commit()
+
+    def check_google(self, id):
+        if len(self.session.query(Google).filter(Google.google_id == id).all()) <= 0:
+            return True
+        return False
+
+    def google_user_id(self, id):
+        if google := self.session.query(Google).filter(Google.google_id == id).all():
+            return google[0].user_id
         return

@@ -21,6 +21,7 @@ class User(Base):
     admin = Column(BOOLEAN, unique=False, default=False)
     developer = Column(BOOLEAN, unique=False, default=False)
     twitter = relationship("Twitter", backref="user", lazy='selectin')
+    google = relationship("Google", backref="user", lazy='selectin')
 
     def __init__(self, username, email, disabled, password=None):
         self.username = username

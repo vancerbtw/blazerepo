@@ -17,6 +17,10 @@ app.config['OAUTH_CREDENTIALS'] = {
     'twitter': {
         'id': os.getenv('TWITTER_ID'),
         'secret': os.getenv('TWITTER_SECRET')
+    },
+    'google': {
+        'id': os.getenv('GOOGLE_ID'),
+        'secret': os.getenv('GOOGLE_SECRET')
     }
 }
 
@@ -101,6 +105,34 @@ def auth_twitter_callback():
     return redirect(session['redirect'], code=302)
 
 
+@app.route("/auth/google")
+def auth_google():
+    session['redirect'] = request.args.get('redirect', default="https://blazerepo.com/", type=str)
+    return GoogleSignIn(app.config['OAUTH_CREDENTIALS']['google']).authorize()
+
+
+@app.route("/auth/callback/google")
+def auth_google_callback():
+    user = GoogleSignIn(app.config['OAUTH_CREDENTIALS']['google']).callback(db)
+    if isinstance(user, str):
+        return redirect(f"/login?redirect={session['redirect']}&error={user}", code=302)
+    session['user'] = user
+    return redirect(session['redirect'], code=302)
+
+@app.route("/users/me")
+def show_me():
+    user = session['user']
+    return {
+        "id": user['id'],
+        "username": user['username'],
+        "disabled": user['disabled'],
+        "verified": user['verified'],
+        "profile_pic": user['profile_pic'],
+        "admin": user['admin'],
+        "developer": user['developer']
+    }
+
+
 @app.route("/account")
 def present_account():
     return {
@@ -151,4 +183,4 @@ def purchase_page(packageid):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(ssl_context=('cert.pem', 'key.pem'))
