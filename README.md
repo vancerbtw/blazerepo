@@ -48,3 +48,4 @@ This environment is strictly for development purposes and it is not recommended 
 
 #3) Accessing the API
 You can connect to the API at https://127.0.0.1:5000/
+**HTTPS PROTOCOL MUST BE USED**
