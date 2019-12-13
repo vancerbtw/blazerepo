@@ -215,5 +215,4 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
-    app.config['SERVER_NAME'] = 'vibhu.gfg:5000'
     app.run(ssl_context=('cert.pem', 'key.pem'))
