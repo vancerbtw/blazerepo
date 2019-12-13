@@ -8,7 +8,7 @@ from helpers.Authentication import Authentication, verify_email_send, make_sessi
 from helpers.Oauth import OAuthSignIn, TwitterSignIn, GoogleSignIn, DiscordSignIn
 from models.User import User
 from models.Package import get_total_downloads
-
+from hashids import Hashids
 # importing database class
 from database.Database import Database
 from flask_mail import Mail, Message

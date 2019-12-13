@@ -1,5 +1,4 @@
 from imports import *
-
 load_dotenv()  # importing credentials
 
 app = Flask(__name__,
@@ -35,18 +34,14 @@ app.config['MAIL_PASSWORD'] = os.getenv('EMAIL_PASS')
 
 mail = Mail(app)
 
+user_hash = Hashids(salt=os.getenv('USER_ID_HASH'), min_length=6)
 
 @app.route("/")
 def root():
-    return render_template("index.html", user=session['user'])
-
-
-@app.route("/email/test")
-def email_test():
-
-    return {
-        "done": True
-    }
+    user = None
+    if 'user' in session:
+        user = session['user']
+    return render_template("index.html", user=user)
 
 
 @app.route("/login")
@@ -150,25 +145,11 @@ def verify_user(verify_token):
     return redirect(f'/login?redirect=/user/verify/{verify_token}')
 
 
-@app.route("/users/me")
-def show_me():
-    user = session['user']
-    return {
-        "id": user['id'],
-        "username": user['username'],
-        "disabled": user['disabled'],
-        "verified": user['verified'],
-        "profile_pic": user['profile_pic'],
-        "admin": user['admin'],
-        "developer": user['developer']
-    }
-
-
 @app.route("/account")
 def present_account():
-    return {
-        "test": "Test!"
-    }
+    if 'user' in session:
+        return render_template("account.html", linked_accounts=db.get_linked_accounts(session['user']), balance=db.get_user_balance(session['user']['id']), user_id=user_hash.encode(session['user']['id']).upper(), user=session['user'], purchases=db.get_user_purchases(session['user']['id']))
+    return redirect("/login?redirect=/account")
 
 
 @app.route("/add/package/<package>/<price>")
@@ -213,6 +194,20 @@ def purchase_page(packageid):
     return redirect(f"/login?redirect=/purchase/{packageid}", code=302)
 
 
+@app.route("/dev/users/me")
+def show_me():
+    user = session['user']
+    return {
+        "id": user['id'],
+        "username": user['username'],
+        "disabled": user['disabled'],
+        "verified": user['verified'],
+        "profile_pic": user['profile_pic'],
+        "admin": user['admin'],
+        "developer": user['developer']
+    }
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
@@ -220,4 +215,5 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
+    app.config['SERVER_NAME'] = 'vibhu.gfg:5000'
     app.run(ssl_context=('cert.pem', 'key.pem'))

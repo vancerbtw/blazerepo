@@ -8,6 +8,8 @@ from models.Twitter import Twitter
 from models.Package import Package
 from models.Google import Google
 from models.Discord import Discord
+from models.Deposit import Deposit
+from models.Wallet import Wallet
 import datetime
 
 
@@ -23,6 +25,7 @@ class Database:
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)
+        self.session.add(Wallet(user.id))
         return user.id
 
     def user_exists(self, email: str = None):
@@ -119,3 +122,26 @@ class Database:
                     return True
                 return "Invalid Verification URL"
         return "Internal Server Error"
+
+    def get_linked_accounts(self, user):
+        accounts = {'linked': []}
+        if discord_result := self.session.query(User, User.discord.has()).filter(User.email == user['email']).first():
+            if discord_result[1]:
+                accounts['linked'].append({'type': "discord", 'account': discord_result[0].discord.name})
+        print(self.session.query(User, User.twitter.has()).filter(User.email == user['email']))
+        if twitter_result := self.session.query(User, User.twitter.has()).filter(User.email == user['email']).first():
+            if twitter_result[1]:
+                accounts['linked'].append({'type': "twitter", 'account': twitter_result[0].twitter.name})
+
+        if google_result := self.session.query(User, User.google.has()).filter(User.email == user['email']).first():
+            if google_result[1]:
+                accounts['linked'].append({'type': "google", 'account': google_result[0].google.name})
+
+        return accounts
+
+    def get_user_purchases(self, user_id):
+        return self.session.query(Purchase).filter(Purchase.user_id == user_id).all()
+
+    def get_user_balance(self, user_id):
+        return self.session.query(User).filter(User.id == int(user_id)).first().wallet.amount
+

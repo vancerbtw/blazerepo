@@ -1,0 +1,381 @@
+* {
+    --semi-bold: 600;
+    --bold: 700;
+    --bg-fade: linear-gradient(to right, #4461b1, #87c2ea);
+    font-family: -apple-system-font,BlinkMacSystemFont,Open Sans,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+body {
+    max-width: 100vw;
+    max-height: 100vh;
+    overflow: hidden;
+    margin: 0;
+    background-color: #f4f8f7;
+}
+
+/* Entire Center Box */
+.centerCard {
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    background-color: white;
+    border-radius: 10px;
+    width: calc(100vw - 30px);
+    height: calc(100vh - 30px);
+    max-width: 1100px;
+    max-height: 600px;
+    box-shadow: rgba(0,0,0,.065) 5px 5px 15px,
+                rgba(0,0,0,.065) -5px -5px 15px;
+    overflow: hidden;
+}
+
+/* Right Column */
+.centerCardContent {
+    box-sizing: border-box;
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    box-shadow: -5px 0 10px -10px rgba(0,0,0,.08);
+    position: absolute;
+    top: 0;
+    left: 35%;
+    max-height: 100%;
+    width: 65%;
+}
+
+/* Left Column */
+.sidebar {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: linear-gradient(to bottom right, rgba(85, 150, 191, .9), rgba(70, 105, 175, .9));
+    width: 35%;
+    height: 100%;
+    text-align: center;
+}
+#logo {
+    width:108px;
+    height:35px;
+    padding: 20px;
+    float: left;
+}
+.sidebarButton {
+    cursor: pointer;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    font-size: 10pt;
+    color: white;
+    border-radius: 100px;
+    width: 65%;
+    margin: 30px auto 0 auto;
+    padding: 15px;
+    border: white 2px solid;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.sidebarButton:hover {
+    background-color: white;
+    color: rgb(85, 150, 191);
+}
+/* Sidebar Profile */
+#profilePicture {
+    margin: 15vh auto 0 auto;
+    width: calc(35vw - 40px);
+    max-width: 100px;
+    height: calc(35vw - 40px);
+    max-height: 100px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-color: white;
+    border-style: solid;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#username {
+    font-size: 16pt;
+    color: white;
+    margin-bottom: 0;
+}
+#email {
+    margin-top: 8px;
+    font-size: 11pt;
+    color: rgba(255,255,255,.65);
+}
+
+#userId {
+    margin-top: 3px;
+    font-size: 11pt;
+    color: rgba(255,255,255,.65);
+}
+
+/* Glyph Buttons */
+#glyphButtonContainer {
+    border-spacing: 2px;
+    margin: 0 auto;
+    display: table;
+    height: 20px;
+}
+#glyphButtonContainer  * {
+    cursor: pointer;
+    padding: 10px;
+    width: 20px;
+    height: 20px;
+    display: table-cell;
+    background-repeat: no-repeat;
+    background-size: 20px 20px;
+    border-radius: 20px;
+    background-position: center;
+}
+#glyphButtonContainer  *:hover {
+    background-color: rgba(0,0,0,.35);
+}
+
+/* Cards in the right column */
+.cardTitle {
+    text-transform: uppercase;
+    font-size: 10pt;
+    letter-spacing: .7pt;
+    font-weight: var(--semi-bold);
+    color: #b0b0b0;
+}
+.contentCard {
+    overflow: hidden;
+    text-align: center;
+    box-sizing: border-box;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* Scrolling Lists in cards (eg: "Linked Accounts" list) */
+.cardScrollerList {
+    margin: 0 auto;
+    max-height: 270px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+.smallListCard {
+    position: relative;
+    width: calc(100% - 6px);
+    margin: 10px auto 10px 0;
+    background-size: 25px;
+    background-position-x: 15px;
+    background-position-y: center;
+    background-repeat: no-repeat;
+    min-height: 30px;
+    line-height: 30px;
+    text-align: left;
+    padding-left: 55px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background-color: #dce2ed;
+    /*box-shadow: rgba(0,0,0,.065) 2.5px 2.5px 10px,
+                rgba(0,0,0,.065) -2.5px -2.5px 10px;*/
+}
+.cardScrollerList .smallListCard:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Buttons at bottom of content cards (eg: "Add Funds") */
+.cardBottomButton {
+    cursor: pointer;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: -20px;
+    border-color: rgba(0,0,0,.15);
+    border-width: 2px;
+    border-top-style: solid;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.cardBottomButton:hover {
+    background-color: rgba(0,0,0,.07);
+    width: calc(100% + 40px);
+    margin-left: -20px;
+}
+
+/* Wallet Card */
+#walletCard {
+    background-color: #487cdc;
+    color: white;
+    margin-bottom: 20px;
+}
+#walletCard .cardBottomButton {
+    border-color: rgba(255,255,255,.35);
+}
+#walletCard .cardBottomButton:hover {
+    background-color: rgba(255,255,255,.15);
+}
+#walletTitle {
+    font-size: 14pt;
+    font-weight: var(--semi-bold);
+    margin: 0;
+}
+#date {
+    font-size: 9pt;
+    opacity: .65;
+    margin: 0;
+    margin-top: 7px;
+}
+#balance {
+    margin: 15px 0;
+    font-size: 24pt;
+    font-weight: var(--semi-bold);
+}
+
+/* Linked Accounts and Purchases Columns */
+.column {
+    float: left;
+    width: calc(50% - 10px);
+}
+
+/* Linked Accounts */
+.accountsAddIcon {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 15px;
+    height: 15px;
+}
+#linkedAccountsCard {
+    padding-left: 5px;
+    padding-right: 5px;
+    max-height: 270px;
+}
+.unlinkedAccount, .linkedAccount {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    -ms-transition: all 0.3s ease;
+}
+.unlinkedAccount {
+    opacity: .4;
+}
+.unlinkedAccount:hover {
+    opacity: 1;
+    background-color: #7ccf9e;
+}
+.unlinkedAccount:hover .accountsAddIcon {
+    background-image: url(../img/icons/plus.svg);
+}
+.linkedAccount:hover {
+    background-color: #ff7d7d;
+}
+.linkedAccount:hover .accountsAddIcon {
+    background-image: url(../img/icons/bin.svg);
+}
+
+/* Purchases Card */
+.purchasedTweakName {
+    margin: 0;
+    margin-bottom: -5px;
+}
+.purchasedTweakDate {
+    margin: 0;
+    text-align: left;
+    font-size: 10pt;
+    color: rgba(0,0,0,.5);
+}
+
+/* Background Shapes */
+#backgroundSquare, #backgroundCircle {
+    background-color: #d6e7f2;
+    width: 50vw;
+    height: 50vw;
+    position: absolute;
+}
+#backgroundSquare {
+    transform: translate(55%, -40%) rotate(45deg);
+    border-radius: 50px;
+    top: 0;
+    right: 0;
+}
+#backgroundCircle {
+    transform: translate(-35%, 65%);
+    border-radius: 50%;
+    bottom: 0;
+    left: 0;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.08);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.20);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.25);
+}
+
+/* Mobile */
+@media only screen and (max-width: 1000px) {
+    body, .centerCard, .centerCardContent {
+        overflow: visible;
+        height: 0;
+    }
+    .sidebar {
+        width: 100%;
+        height: 350px;
+    }
+    .sidebarButton {
+        margin: 0;
+        width: 35%;
+        position: absolute;
+        top: 25px;
+        right: 20px;
+        padding: 8px;
+    }
+    .centerCard {
+        width: 100vw;
+        top: 0;
+        left: 0;
+        transform: none;
+        border-radius: 0;
+    }
+    .centerCardContent {
+        box-shadow: 0 -5px 10px rgba(0,0,0,.08);
+        padding-left: 12px;
+        padding-right: 12px;
+        top: 350px;
+        width: 100%;
+        left: 0;
+    }
+    .column {
+        padding: 0 !important;
+        width: 100%;
+    }
+    #profilePicture {
+        margin-top: 100px;
+    }
+    #backgroundSquare, #backgroundCircle {
+        display: none;
+    }
+    .cardScrollerList {
+        max-height: fit-content;
+    }
+}

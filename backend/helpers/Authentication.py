@@ -10,7 +10,7 @@ def make_session_user(user):
     return {"id": user.id, "username": user.username, "email": user.email, "disabled": user.disabled, "verified": user.verified, "profile_pic": user.profile_pic, "admin": user.admin, "developer": user.developer}
 
 
-def verify_email_send(email, code, mail, name, sender):
+def verify_email_send(email, code, mail):
     mail.send(Message(subject="Blaze Email Verification", body=f"https://localhost:5000/user/verify/{code}", sender=("Blaze Repo", "noreply@blazerepo.com"), recipients=[email]))
 
 
