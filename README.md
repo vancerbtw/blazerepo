@@ -40,12 +40,12 @@ All of these credentials will be inputted in a .env file that will be placed in 
 
 A sample *.env* file has been supplied in the root of this repository.
 
-#2) Running
+# 2) Running
 To run Blaze Repo API web server instance navigate to the *./backend* directory and execute the following command:
 ``FLASK_APP=main.py FLASK_ENV=development flask run --cert=cert.pem --key=key.pem``
 This will initialize the web server and allow for SSL connections.
 This environment is strictly for development purposes and it is not recommended to use this runtime environment in production level deployments.
 
-#3) Accessing the API
+# 3) Accessing the API
 You can connect to the API at https://localhost:5000/
 **HTTPS PROTOCOL MUST BE USED**
