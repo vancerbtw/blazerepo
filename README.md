@@ -47,4 +47,5 @@ This will initialize the web server and allow for SSL connections.
 This environment is strictly for development purposes and it is not recommended to use this runtime environment in production level deployments.
 
 #3) Accessing the API
-You can connect to the API at https://127.0.0.1:5000/
+You can connect to the API at https://localhost:5000/
+**HTTPS PROTOCOL MUST BE USED**
