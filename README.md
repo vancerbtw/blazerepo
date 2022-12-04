@@ -49,3 +49,5 @@ This environment is strictly for development purposes and it is not recommended 
 # 3) Accessing the API
 You can connect to the API at https://localhost:5000/
 **HTTPS PROTOCOL MUST BE USED**
+
+***THIS PROJECT HAS BEEN ARCHIVED FOR EDUCATION AND IS NO LONGER IN DEVELOPMENT***
